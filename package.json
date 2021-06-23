@@ -48,7 +48,20 @@
   "devDependencies": {
     "@types/react-modal": "^3.12.0",
     "autoprefixer": "^9",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
     "postcss": "^7",
+    "prettier": "^2.3.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
