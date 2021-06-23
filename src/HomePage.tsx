@@ -1,9 +1,11 @@
 import {useEffect, useState} from 'react';
 import ReactModal from 'react-modal';
 
-// // Set root app element for modal accessibility
-// // http://reactcommunity.org/react-modal/accessibility/
-// ReactModal.setAppElement('#root');
+import RequestInviteForm from './RequestInviteForm';
+
+// Set root app element for modal accessibility
+// http://reactcommunity.org/react-modal/accessibility/
+ReactModal.setAppElement('#root');
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,8 +30,8 @@ export default function HomePage() {
         <button className="mt-4" onClick={onRequestInviteClick}>request an invite</button>
       </div>
 
-      <ReactModal isOpen={isModalOpen} onRequestClose={onModalClose}>
-        <h1>Request an Invite</h1>
+      <ReactModal isOpen={isModalOpen} onRequestClose={onModalClose} className="w-96 border p-6 bg-white" overlayClassName="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 bg-white bg-opacity-75">
+        <RequestInviteForm />
       </ReactModal>
     </>
   )
