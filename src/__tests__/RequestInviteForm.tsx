@@ -3,13 +3,13 @@ import userEvent from "@testing-library/user-event";
 import RequestInviteForm from "../RequestInviteForm";
 
 test("renders form", () => {
-  render(<RequestInviteForm />);
+  render(<RequestInviteForm onFinish={() => {}} />);
 
   expect(screen.getByPlaceholderText(/full name/i)).toBeInTheDocument();
 });
 
 test("renders required errors", async () => {
-  render(<RequestInviteForm />);
+  render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
     userEvent.click(screen.getByPlaceholderText(/full name/i));
@@ -24,7 +24,7 @@ test("renders required errors", async () => {
 });
 
 test("validate email", async () => {
-  render(<RequestInviteForm />);
+  render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
     userEvent.type(screen.getByPlaceholderText(/^email/i), "hello");
@@ -37,7 +37,7 @@ test("validate email", async () => {
 });
 
 test("matching confirm email", async () => {
-  render(<RequestInviteForm />);
+  render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
     userEvent.type(screen.getByPlaceholderText(/^email/i), "hello@gmail.com");

@@ -36,7 +36,7 @@ export default function HomePage() {
         className="w-96 border p-6 bg-white"
         overlayClassName="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 bg-white bg-opacity-75"
       >
-        <RequestInviteForm />
+        <RequestInviteForm onFinish={onModalClose} />
       </ReactModal>
     </>
   );
