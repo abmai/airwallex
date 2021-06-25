@@ -1,17 +1,15 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import HomePage from "../HomePage";
+import { fireEvent, render, screen } from '@testing-library/react';
+import HomePage from '../HomePage';
 
-test("renders home page", () => {
+test('renders home page', () => {
   render(<HomePage />);
-
-  const linkElement = screen.getByText(/a better way/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/a better way/i)).toBeInTheDocument();
 });
 
-test("renders modal", () => {
+test('renders modal', () => {
   render(<HomePage />);
 
-  expect(screen.queryByRole("dialog")).toBeNull();
-  fireEvent.click(screen.getByText("request an invite"));
-  expect(screen.getByRole("dialog")).toBeInTheDocument();
+  expect(screen.queryByRole('dialog')).toBeNull();
+  fireEvent.click(screen.getByText(/request an invite/i));
+  expect(screen.getByRole('dialog')).toBeInTheDocument();
 });

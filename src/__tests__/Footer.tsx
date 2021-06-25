@@ -1,8 +1,7 @@
-import { render, screen } from "@testing-library/react";
-import Footer from "../Footer";
+import { render, screen } from '@testing-library/react';
+import Footer from '../Footer';
 
-test("renders footer", () => {
+test('renders footer', () => {
   render(<Footer />);
-  const linkElement = screen.getByText(/san francisco/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/san francisco/i)).toBeInTheDocument();
 });
