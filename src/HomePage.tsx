@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
-import ReactModal from "react-modal";
+import { useEffect, useState } from 'react';
+import ReactModal from 'react-modal';
 
-import RequestInviteForm from "./RequestInviteForm";
+import RequestInviteForm from './RequestInviteForm';
+import Button from './Button';
 
 // Set root app element for modal accessibility
 // http://reactcommunity.org/react-modal/accessibility/
-ReactModal.setAppElement("#root");
+if (process.env.NODE_ENV !== 'test') {
+  ReactModal.setAppElement('#root');
+}
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,11 +26,15 @@ export default function HomePage() {
   return (
     <>
       <div className="w-screen h-screen pt-20 pb-20 flex flex-col justify-center items-center">
-        <h1>a better way to enjoy every day.</h1>
-        <h5 className="mt-4">be the first to know when we launch.</h5>
-        <button className="mt-4" onClick={onRequestInviteClick}>
-          request an invite
-        </button>
+        <h1 className="text-6xl text-center font-medium">
+          a better way
+          <br />
+          to enjoy every day.
+        </h1>
+        <h2 className="mt-4 text-2xl">be the first to know when we launch.</h2>
+        <Button className="mt-6" onClick={onRequestInviteClick}>
+          Request an Invite
+        </Button>
       </div>
 
       <ReactModal
