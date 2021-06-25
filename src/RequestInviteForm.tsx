@@ -4,6 +4,8 @@ import * as yup from 'yup';
 import { useState } from 'react';
 import axios from 'axios';
 
+import Button from './Button';
+
 interface FormInputs {
   fullName: string;
   email: string;
@@ -33,13 +35,11 @@ const schema = yup.object().shape({
 
 export default function RequestInviteForm(props: Props) {
   const [requestState, setRequestState] = useState<RequestState | undefined>();
-
   const { register, handleSubmit, formState } = useForm<FormInputs>({
-    mode: 'onBlur',
     resolver: yupResolver(schema),
   });
-
   const { errors } = formState;
+  const isSuccess = requestState?.status === 'success';
 
   const onSubmit = handleSubmit(async (data: FormInputs) => {
     const { fullName, email } = data;
@@ -70,56 +70,72 @@ export default function RequestInviteForm(props: Props) {
 
   function renderSuccess() {
     return (
-      <>
-        <h1>All done!</h1>
-        <p>
+      <div className="flex flex-col h-56">
+        <h1 className="text-center text-2xl font-medium">All done!</h1>
+        <p className="text-center text-md mt-4">
           Thank you for joining the waitlist. We will let you know as soon as
           you are able to try the app.
         </p>
-        <button onClick={() => props.onFinish()}>Ok</button>
-      </>
+        <div className="flex-1" />
+        <Button onClick={props.onFinish}>
+          <span className="text-lg font-medium">Ok</span>
+        </Button>
+      </div>
     );
   }
 
   function renderForm() {
     return (
-      <>
-        <h1>Request an Invite</h1>
-        <form onSubmit={onSubmit} className="flex flex-col">
-          <label htmlFor="fullName">
-            <input
-              id="fullName"
-              placeholder="Full Name"
-              {...register('fullName')}
-            />
+      <div className="flex flex-col h-128">
+        <h1 className="text-center text-2xl font-medium">Request an invite</h1>
+        <form onSubmit={onSubmit} className="flex flex-col mt-8 flex-1">
+          <label htmlFor="fullName" className="text-sm">
+            Full Name <span>(required)</span>
           </label>
-          <p>{errors.fullName?.message}</p>
+          <input
+            id="fullName"
+            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg"
+            {...register('fullName')}
+          />
+          <p className="text-red-600 text-sm">{errors.fullName?.message}</p>
 
-          <label htmlFor="email">
-            <input id="email" placeholder="Email" {...register('email')} />
+          <label htmlFor="email" className="text-sm mt-2">
+            Email <span>(required)</span>
           </label>
-          <p>{errors.email?.message}</p>
+          <input
+            id="email"
+            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg"
+            {...register('email')}
+          />
+          <p className="text-red-600 text-sm">{errors.email?.message}</p>
 
-          <label htmlFor="confirmEmail">
-            <input
-              id="confirmEmail"
-              placeholder="Confirm Email"
-              {...register('confirmEmail')}
-            />
+          <label htmlFor="confirmEmail" className="text-sm mt-2">
+            Confirm Email
           </label>
-          <p>{errors.confirmEmail?.message}</p>
+          <input
+            id="confirmEmail"
+            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg"
+            {...register('confirmEmail')}
+          />
+          <p className="text-red-600 text-sm">{errors.confirmEmail?.message}</p>
 
-          <button
+          <div className="flex-1" />
+
+          <p className="text-red-600 text-sm text-center mb-2">
+            {requestState?.errorMessage}
+          </p>
+          <Button
             type="submit"
             disabled={requestState?.status === 'requesting'}
           >
-            {requestState?.status === 'requesting' ? 'Sending...' : 'Submit'}
-          </button>
-          <p>{requestState?.errorMessage}</p>
+            <span className="text-lg font-medium">
+              {requestState?.status === 'requesting' ? 'Sending...' : 'Submit'}
+            </span>
+          </Button>
         </form>
-      </>
+      </div>
     );
   }
 
-  return requestState?.status === 'success' ? renderSuccess() : renderForm();
+  return isSuccess ? renderSuccess() : renderForm();
 }
