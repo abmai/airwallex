@@ -22,6 +22,8 @@ interface RequestState {
 
 interface Props {
   onFinish: () => void;
+  onSubmitStart?: () => void;
+  onSubmitFinish?: () => void;
 }
 
 const schema = yup.object().shape({
@@ -49,6 +51,9 @@ export default function RequestInviteForm(props: Props) {
 
   const onSubmit = handleSubmit(async (data: FormInputs) => {
     const { fullName, email } = data;
+    // Trigger on submit start props if possible
+    props.onSubmitStart?.();
+
     setRequestState({
       status: 'requesting',
     });
@@ -71,6 +76,8 @@ export default function RequestInviteForm(props: Props) {
         // Otherwise default to the message in the generic error object
         errorMessage: response?.data?.errorMessage ?? message,
       });
+    } finally {
+      props.onSubmitFinish?.();
     }
   });
 

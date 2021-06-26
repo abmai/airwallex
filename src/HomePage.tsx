@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [canCloseModal, setCanCloseModal] = useState(true);
 
   useEffect(() => {}, []);
 
@@ -21,6 +22,14 @@ export default function HomePage() {
 
   function onModalClose() {
     setIsModalOpen(false);
+  }
+
+  function onInviteSubmitStart() {
+    setCanCloseModal(false);
+  }
+
+  function onInviteSubmitFinish() {
+    setCanCloseModal(true);
   }
 
   return (
@@ -42,10 +51,16 @@ export default function HomePage() {
       <ReactModal
         isOpen={isModalOpen}
         onRequestClose={onModalClose}
+        shouldCloseOnEsc={canCloseModal}
+        shouldCloseOnOverlayClick={canCloseModal}
         className="w-80 lg:w-96 rounded-lg p-6 transition-all bg-white shadow-modal flex flex-col text-primary outline-none"
         overlayClassName="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 bg-white bg-opacity-80"
       >
-        <RequestInviteForm onFinish={onModalClose} />
+        <RequestInviteForm
+          onFinish={onModalClose}
+          onSubmitStart={onInviteSubmitStart}
+          onSubmitFinish={onInviteSubmitFinish}
+        />
       </ReactModal>
     </>
   );
