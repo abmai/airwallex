@@ -25,11 +25,14 @@ interface Props {
 }
 
 const schema = yup.object().shape({
-  fullName: yup.string().required('Name is required.'),
+  fullName: yup
+    .string()
+    .min(3, 'Name must be at least 3 characters.')
+    .required('Name is required.'),
   email: yup
     .string()
     .email('Must be a valid email.')
-    .required('Email is required.'),
+    .required('Must be a valid email.'),
   confirmEmail: yup
     .string()
     // Value is either null or must match previous email field

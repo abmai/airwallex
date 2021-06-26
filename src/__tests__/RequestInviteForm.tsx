@@ -31,14 +31,12 @@ test('renders required errors', async () => {
   render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
-    userEvent.click(screen.getByLabelText(/full name/i));
-    userEvent.click(screen.getByLabelText(/^email/i));
     userEvent.click(screen.getByText(/submit/i));
   });
 
   await waitFor(() => {
-    expect(screen.getByText(/name is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/at least 3 characters/i)).toBeInTheDocument();
+    expect(screen.getByText(/must be a valid email/i)).toBeInTheDocument();
   });
 });
 
