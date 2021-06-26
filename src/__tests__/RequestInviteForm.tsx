@@ -1,20 +1,39 @@
-import { render, screen, act, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import RequestInviteForm from "../RequestInviteForm";
+import { render, screen, act, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import RequestInviteForm, { AUTH_API } from '../RequestInviteForm';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 
-test("renders form", () => {
+const success = setupServer(
+  rest.post(AUTH_API, (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
+  }),
+);
+
+const failure = setupServer(
+  rest.post(AUTH_API, (req, res, ctx) => {
+    return res(
+      ctx.status(400),
+      ctx.json({
+        errorMessage: 'Request failure',
+      }),
+    );
+  }),
+);
+
+test('renders form', () => {
   render(<RequestInviteForm onFinish={() => {}} />);
 
-  expect(screen.getByPlaceholderText(/full name/i)).toBeInTheDocument();
+  expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
 });
 
-test("renders required errors", async () => {
+test('renders required errors', async () => {
   render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
-    userEvent.click(screen.getByPlaceholderText(/full name/i));
-    userEvent.click(screen.getByPlaceholderText(/^email/i));
-    userEvent.click(screen.getByPlaceholderText(/confirm email/i));
+    userEvent.click(screen.getByLabelText(/full name/i));
+    userEvent.click(screen.getByLabelText(/^email/i));
+    userEvent.click(screen.getByText(/submit/i));
   });
 
   await waitFor(() => {
@@ -23,12 +42,12 @@ test("renders required errors", async () => {
   });
 });
 
-test("validate email", async () => {
+test('validate email', async () => {
   render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
-    userEvent.type(screen.getByPlaceholderText(/^email/i), "hello");
-    userEvent.click(screen.getByPlaceholderText(/confirm email/i));
+    userEvent.type(screen.getByLabelText(/^email/i), 'hello');
+    userEvent.click(screen.getByText(/submit/i));
   });
 
   await waitFor(() => {
@@ -36,19 +55,54 @@ test("validate email", async () => {
   });
 });
 
-test("matching confirm email", async () => {
+test('matching confirm email', async () => {
   render(<RequestInviteForm onFinish={() => {}} />);
 
   act(() => {
-    userEvent.type(screen.getByPlaceholderText(/^email/i), "hello@gmail.com");
-    userEvent.type(
-      screen.getByPlaceholderText(/confirm email/i),
-      "hell@gmail.com"
-    );
-    userEvent.click(screen.getByPlaceholderText(/^email/i));
+    userEvent.type(screen.getByLabelText(/^email/i), 'hello@gmail.com');
+    userEvent.type(screen.getByLabelText(/confirm email/i), 'hell@gmail.com');
+    userEvent.click(screen.getByText(/^submit/i));
   });
 
   await waitFor(() => {
     expect(screen.getByText(/emails must match/i)).toBeInTheDocument();
+  });
+});
+
+test('successful submit', async () => {
+  success.listen();
+
+  render(<RequestInviteForm onFinish={() => {}} />);
+
+  act(() => {
+    userEvent.type(screen.getByLabelText(/^full name/i), 'anh');
+    userEvent.type(screen.getByLabelText(/^email/i), 'hello@gmail.com');
+    userEvent.type(screen.getByLabelText(/confirm email/i), 'hello@gmail.com');
+    userEvent.click(screen.getByText(/^submit/i));
+  });
+
+  await waitFor(() => {
+    expect(screen.getByText(/all done/i)).toBeInTheDocument();
+    success.resetHandlers();
+    success.close();
+  });
+});
+
+test('show server error', async () => {
+  failure.listen();
+
+  render(<RequestInviteForm onFinish={() => {}} />);
+
+  act(() => {
+    userEvent.type(screen.getByLabelText(/^full name/i), 'anh');
+    userEvent.type(screen.getByLabelText(/^email/i), 'hello@gmail.com');
+    userEvent.type(screen.getByLabelText(/confirm email/i), 'hello@gmail.com');
+    userEvent.click(screen.getByText(/^submit/i));
+  });
+
+  await waitFor(() => {
+    expect(screen.getByText(/request failure/i)).toBeInTheDocument();
+    failure.resetHandlers();
+    failure.close();
   });
 });

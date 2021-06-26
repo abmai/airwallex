@@ -6,6 +6,9 @@ import axios from 'axios';
 
 import Button from './Button';
 
+export const AUTH_API =
+  'https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth';
+
 interface FormInputs {
   fullName: string;
   email: string;
@@ -94,7 +97,7 @@ export default function RequestInviteForm(props: Props) {
           </label>
           <input
             id="fullName"
-            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg"
+            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg focus:outline-none focus-visible:ring-2"
             {...register('fullName')}
           />
           <p className="text-red-600 text-sm">{errors.fullName?.message}</p>
@@ -104,7 +107,7 @@ export default function RequestInviteForm(props: Props) {
           </label>
           <input
             id="email"
-            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg"
+            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg focus:outline-none focus-visible:ring-2"
             {...register('email')}
           />
           <p className="text-red-600 text-sm">{errors.email?.message}</p>
@@ -114,7 +117,7 @@ export default function RequestInviteForm(props: Props) {
           </label>
           <input
             id="confirmEmail"
-            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg"
+            className="bg-input-background mt-0.5 p-3 placeholder-secondary rounded-lg focus:outline-none focus-visible:ring-2"
             {...register('confirmEmail')}
           />
           <p className="text-red-600 text-sm">{errors.confirmEmail?.message}</p>

@@ -24,6 +24,8 @@ module.exports = {
       opacity: ['disabled'],
       backgroundColor: ['disabled'],
       backgroundOpacity: ['disabled'],
+      ringColor: ['focus-visible'],
+      ringWidth: ['focus-visible'],
     },
   },
   plugins: [],
