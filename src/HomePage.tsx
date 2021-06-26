@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <>
-      <div className="w-screen h-screen pt-20 pb-20 flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center">
         <h1 className="text-4xl lg:text-6xl text-center font-bold lg:font-semibold">
           a better way
           <br />
@@ -42,7 +42,7 @@ export default function HomePage() {
       <ReactModal
         isOpen={isModalOpen}
         onRequestClose={onModalClose}
-        className="w-80 lg:w-96 max-h-128 rounded-lg p-6 transition-all bg-white shadow-modal flex flex-col text-primary"
+        className="w-80 lg:w-96 rounded-lg p-6 transition-all bg-white shadow-modal flex flex-col text-primary outline-none"
         overlayClassName="flex flex-col justify-center items-center fixed top-0 bottom-0 right-0 left-0 bg-white bg-opacity-80"
       >
         <RequestInviteForm onFinish={onModalClose} />
